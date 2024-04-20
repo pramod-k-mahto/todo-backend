@@ -49,6 +49,24 @@ app.get("/todolist", (req, res) => {
     }
   });
 });
+// Update a to-do list item
+app.post("/todolist/update/:id", (req, res) => {
+  const itemId = req.params.id;
+  const { list } = req.body;
+
+  const sql = "UPDATE todolist SET list = ? WHERE idtodolist = ?";
+  const values = [list, itemId];
+
+  pool.query(sql, values, (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ error: "Failed to update list" });
+    } else {
+      console.log("Update successful");
+      res.json({ status: 200 });
+    }
+  });
+});
 
 app.post("/todolist", (req, res) => {
   const { list } = req.body;
